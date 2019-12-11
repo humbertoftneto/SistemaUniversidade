@@ -9,6 +9,8 @@ import Model.ProfessoresBEAN;
 import java.util.List;
 import javax.swing.JOptionPane;
 import Controller.Controle;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import javax.swing.JFrame;
 
 /**
@@ -19,6 +21,7 @@ public class Tela_Professores extends javax.swing.JFrame {
 
     javax.swing.table.DefaultTableModel modelo;
     static Controle controle = new Controle();
+    static Timestamp horalocal = Timestamp.valueOf(LocalDateTime.now());
 
     public Tela_Professores() {
         initComponents();
@@ -53,6 +56,7 @@ public class Tela_Professores extends javax.swing.JFrame {
         ativado = new javax.swing.JRadioButton();
         desativado = new javax.swing.JRadioButton();
         id = new javax.swing.JTextField();
+        jCheckBox1 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -157,6 +161,13 @@ public class Tela_Professores extends javax.swing.JFrame {
             }
         });
 
+        jCheckBox1.setText("Mostrar inativos");
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -164,6 +175,27 @@ public class Tela_Professores extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(nome, javax.swing.GroupLayout.PREFERRED_SIZE, 538, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addComponent(id, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 31, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(cpf, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(83, 83, 83)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(ativado)
+                                .addGap(18, 18, 18)
+                                .addComponent(desativado)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jCheckBox1))))
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -172,26 +204,7 @@ public class Tela_Professores extends javax.swing.JFrame {
                         .addGap(84, 84, 84)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(83, 83, 83)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(cpf, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(132, 132, 132)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(ativado)
-                                        .addGap(41, 41, 41)
-                                        .addComponent(desativado))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(nome, javax.swing.GroupLayout.PREFERRED_SIZE, 538, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(32, 32, 32)
-                                .addComponent(id, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -208,23 +221,20 @@ public class Tela_Professores extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(jLabel3))
                 .addGap(14, 14, 14)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(cpf, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2)
-                            .addComponent(jButton3)
-                            .addComponent(jButton4))
-                        .addGap(20, 20, 20))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(ativado)
-                            .addComponent(desativado))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cpf, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ativado)
+                    .addComponent(desativado)
+                    .addComponent(jCheckBox1))
+                .addGap(26, 26, 26)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3)
+                    .addComponent(jButton4))
+                .addGap(20, 20, 20))
         );
 
         pack();
@@ -251,31 +261,26 @@ public class Tela_Professores extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         if (id.getText().isEmpty()) {
             if (nome.getText().isEmpty() || cpf.getText().isEmpty() || ativado.getText().isEmpty() || desativado
-            .getText().isEmpty()) {
+                    .getText().isEmpty()) {
                 JOptionPane.showMessageDialog(rootPane, "Campo vazio, por favor preencher!");
             } else {
-                if (ativado.isSelected()) {
-                    ProfessoresBEAN prof = new ProfessoresBEAN(0, nome.getText(), cpf.getText(), 1);
-                    controle.addProfessor(prof);
-                } else {
-                    ProfessoresBEAN prof = new ProfessoresBEAN(0, nome.getText(), cpf.getText(), 0);
-                    controle.addProfessor(prof);
-                }
+
+                ProfessoresBEAN prof = new ProfessoresBEAN(0, nome.getText(), cpf.getText(), 1, horalocal);
+                controle.addProfessor(prof);
                 nome.setText("");
                 cpf.setText("");
                 List<ProfessoresBEAN> listaprofessores = controle.listaProfessores();
                 preencher_tabela(listaprofessores);
             }
-        } 
-        else {
+        } else {
             if (nome.getText().isEmpty() || cpf.getText().isEmpty() || ativado.getText().isEmpty() || desativado.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(rootPane, "Campo vazio, por favor preencher!");
             } else {
                 if (ativado.isSelected()) {
-                    ProfessoresBEAN prof = new ProfessoresBEAN(Integer.parseInt(id.getText()), nome.getText(), cpf.getText(), 1);
+                    ProfessoresBEAN prof = new ProfessoresBEAN(Integer.parseInt(id.getText()), nome.getText(), cpf.getText(), 1, horalocal);
                     controle.updateProfessor(prof);
                 } else {
-                    ProfessoresBEAN prof = new ProfessoresBEAN(Integer.parseInt(id.getText()), nome.getText(), cpf.getText(), 0);
+                    ProfessoresBEAN prof = new ProfessoresBEAN(Integer.parseInt(id.getText()), nome.getText(), cpf.getText(), 0,  horalocal);
                     controle.updateProfessor(prof);
                 }
                 nome.setText("");
@@ -318,26 +323,24 @@ public class Tela_Professores extends javax.swing.JFrame {
     }//GEN-LAST:event_ativadoActionPerformed
 
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
-        
+
     }//GEN-LAST:event_jButton4MouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         if (desativado.isSelected()) {
             JOptionPane.showMessageDialog(rootPane, "Professor já desativado!");
+        } else {
+            if (id.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(rootPane, "Selecione na tabela o professor que deseja desativar!");
+            } else {
+
+                ProfessoresBEAN prof = new ProfessoresBEAN(Integer.parseInt(id.getText()), nome.getText(), cpf.getText(), 0, horalocal);
+                controle.updateProfessor(prof);
+
+            }
+            List<ProfessoresBEAN> listaprofessores = controle.listaProfessores();
+            preencher_tabela(listaprofessores);
         }
-        else{
-        if (id.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "Selecione na tabela o professor que deseja desativar!");
-        }
-        else{
-           
-                    ProfessoresBEAN prof = new ProfessoresBEAN(Integer.parseInt(id.getText()), nome.getText(), cpf.getText(), 0);
-                    controle.updateProfessor(prof);
-                
-        }
-        List<ProfessoresBEAN> listaprofessores = controle.listaProfessores();
-                preencher_tabela(listaprofessores);
-                }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idActionPerformed
@@ -347,6 +350,10 @@ public class Tela_Professores extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -397,6 +404,7 @@ public class Tela_Professores extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

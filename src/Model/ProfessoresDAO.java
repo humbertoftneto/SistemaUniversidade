@@ -20,13 +20,13 @@ public class ProfessoresDAO {
     }
 
     public long create(ProfessoresBEAN professor) {
-        String query = "INSERT INTO PROFESSOR (nomeProfessor, cpfProfessor, situacaoProfessor) VALUES (?,?,?)";
-        return MySQLDAO.executeQuery(query, professor.getNomeProfessor(), professor.getCpfProfessor(), professor.getSituacaoProfessor());
+        String query = "INSERT INTO PROFESSOR (nomeProfessor, cpfProfessor, situacaoProfessor, ultimaAtualizacao) VALUES (?,?,?,?)";
+        return MySQLDAO.executeQuery(query, professor.getNomeProfessor(), professor.getCpfProfessor(), professor.getSituacaoProfessor(), professor.getUltimaAtualizacao());
     }
 
     public void update(ProfessoresBEAN professor) {
-        String query = "UPDATE PROFESSOR SET nomeProfessor=?, cpfProfessor=?, situacaoProfessor=? WHERE idProfessor = ?";
-        MySQLDAO.executeQuery(query, professor.getNomeProfessor(), professor.getCpfProfessor(), professor.getSituacaoProfessor(), professor.getIdProfessor());
+        String query = "UPDATE PROFESSOR SET nomeProfessor=?, cpfProfessor=?, situacaoProfessor=?, ultimaAtualizacao=? WHERE idProfessor = ?";
+        MySQLDAO.executeQuery(query, professor.getNomeProfessor(), professor.getCpfProfessor(), professor.getSituacaoProfessor(), professor.getUltimaAtualizacao(), professor.getIdProfessor());
     }
 
     public ArrayList<ProfessoresBEAN> findAllProfessor() {
@@ -40,7 +40,7 @@ public class ProfessoresDAO {
         try {
             while (rs.next()) {
                 lista.add(new ProfessoresBEAN(rs.getInt("idProfessor"), rs.getString("nomeProfessor"), rs.getString("cpfProfessor"),
-                        rs.getInt("situacaoProfessor")));
+                        rs.getInt("situacaoProfessor"), rs.getTimestamp("ultimaAtualizacao")));
             }
             rs.close();
         } catch (SQLException e) {
@@ -55,7 +55,7 @@ public class ProfessoresDAO {
         rs = MySQLDAO.getResultSet("SELECT * FROM Contatos WHERE idProfessor=?", idProfessor);
         try {
             if (rs.next()) {
-                result = new ProfessoresBEAN(rs.getInt("idProfessor"), rs.getString("nomeProfessor"), rs.getString("cpfProfessor"), rs.getInt("situacaoProfessor"));
+                result = new ProfessoresBEAN(rs.getInt("idProfessor"), rs.getString("nomeProfessor"), rs.getString("cpfProfessor"), rs.getInt("situacaoProfessor"), rs.getTimestamp("ultimaAtualizacao"));
             }
             rs.close();
         } catch (SQLException e) {
@@ -67,7 +67,7 @@ public class ProfessoresDAO {
     public int findIdProfessor(ProfessoresBEAN professor) {
         int result = 0;
         ResultSet rs = null;
-        rs = MySQLDAO.getResultSet("SELECT * FROM contatos WHERE nomeProfessor= ? and cpfProfessor= ?and situacaoProfessor = ?", professor.getNomeProfessor(), professor.getCpfProfessor(), professor.getSituacaoProfessor());
+        rs = MySQLDAO.getResultSet("SELECT * FROM contatos WHERE nomeProfessor= ? and cpfProfessor= ?and situacaoProfessor = ? and ultimaAtualizacao = ?", professor.getNomeProfessor(), professor.getCpfProfessor(), professor.getSituacaoProfessor(), professor.getUltimaAtualizacao());
         try {
             if (rs.next()) {
                 result = rs.getInt("idProfessor");

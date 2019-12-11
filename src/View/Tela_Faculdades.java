@@ -9,6 +9,8 @@ import Model.FaculdadesBEAN;
 import Controller.Controle;
 import java.util.List;
 import javax.swing.JOptionPane;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -18,9 +20,12 @@ public class Tela_Faculdades extends javax.swing.JFrame {
 
     javax.swing.table.DefaultTableModel modelo;
     static Controle controle = new Controle();
+    static Timestamp horalocal = Timestamp.valueOf(LocalDateTime.now());
 
     public Tela_Faculdades() {
         initComponents();
+        ativado.setEnabled(false);
+        desativado.setEnabled(false);
         modelo = (javax.swing.table.DefaultTableModel) TabelaContatosCad.getModel();
 
         List<FaculdadesBEAN> listfaculdades = controle.listaFaculdades();
@@ -34,7 +39,9 @@ public class Tela_Faculdades extends javax.swing.JFrame {
         modelo.setNumRows(0);
         try {
             for (FaculdadesBEAN facul : listFaculdades) {
-                modelo.addRow(new Object[]{facul.getIdFaculdade(), facul.getDescricaoFaculdade(), facul.getSituacaoFaculdade()});
+                if (facul.getSituacaoFaculdade() == 1) {
+                    modelo.addRow(new Object[]{facul.getIdFaculdade(), facul.getDescricaoFaculdade(), facul.getSituacaoFaculdade()});
+                }
             }
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(null, "Erro ao listar dados - " + erro);
@@ -57,6 +64,7 @@ public class Tela_Faculdades extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        inativo = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -96,11 +104,11 @@ public class Tela_Faculdades extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Descrição da faculdade", "Situação"
+                "ID", "Descrição da faculdade", "Situação", "Ultima atualização"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -149,6 +157,13 @@ public class Tela_Faculdades extends javax.swing.JFrame {
             }
         });
 
+        inativo.setText("Mostrar inativos");
+        inativo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inativoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -159,10 +174,6 @@ public class Tela_Faculdades extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(ativado)
-                                .addGap(51, 51, 51)
-                                .addComponent(desativado))
                             .addComponent(jLabel1)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(descricao, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -177,7 +188,13 @@ public class Tela_Faculdades extends javax.swing.JFrame {
                         .addGap(101, 101, 101)
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(ativado)
+                        .addGap(18, 18, 18)
+                        .addComponent(desativado)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(inativo)))
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -197,10 +214,15 @@ public class Tela_Faculdades extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ativado)
-                    .addComponent(desativado))
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ativado)
+                            .addComponent(desativado))
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(inativo)
+                        .addGap(8, 8, 8)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -232,16 +254,17 @@ public class Tela_Faculdades extends javax.swing.JFrame {
     }//GEN-LAST:event_ativadoActionPerformed
 
     private void TabelaContatosCadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabelaContatosCadMouseClicked
+        ativado.setEnabled(true);
+        desativado.setEnabled(true);
         int linhaEditora = TabelaContatosCad.getSelectedRow();
         id.setText(TabelaContatosCad.getValueAt(linhaEditora, 0).toString());
         descricao.setText(TabelaContatosCad.getValueAt(linhaEditora, 1).toString());
         if (TabelaContatosCad.getValueAt(linhaEditora, 2).equals(1)) {
             ativado.setSelected(true);
-            //ativado.setText(TabelaContatosCad.getValueAt(linhaEditora, 3).toString());
         } else {
             desativado.setSelected(true);
-            //desativado.setText(TabelaContatosCad.getValueAt(linhaEditora, 3).toString());
         }
+
     }//GEN-LAST:event_TabelaContatosCadMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -251,43 +274,42 @@ public class Tela_Faculdades extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         id.setText("");
         descricao.setText("");
+        ativado.setEnabled(false);
+        desativado.setEnabled(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         if (id.getText().isEmpty()) {
-            if (descricao.getText().isEmpty() || ativado.getText().isEmpty() || desativado
-                    .getText().isEmpty()) {
+            if (descricao.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(rootPane, "Campo vazio, por favor preencher!");
             } else {
-                if (ativado.isSelected()) {
-                    FaculdadesBEAN facul = new FaculdadesBEAN(0, descricao.getText(), 1);
-                    controle.addFaculdade(facul);
-                } else {
-                    FaculdadesBEAN facul = new FaculdadesBEAN(0, descricao.getText(), 0);
-                    controle.addFaculdade(facul);
-                }
+                FaculdadesBEAN facul = new FaculdadesBEAN(0, descricao.getText(), 1, horalocal);
+                controle.addFaculdade(facul);
                 descricao.setText("");
                 List<FaculdadesBEAN> listfaculdades = controle.listaFaculdades();
-
                 preencher_tabela(listfaculdades);
             }
         } else {
+
             if (descricao.getText().isEmpty() || ativado.getText().isEmpty() || desativado
                     .getText().isEmpty()) {
                 JOptionPane.showMessageDialog(rootPane, "Campo vazio, por favor preencher!");
             } else {
                 if (ativado.isSelected()) {
-                    FaculdadesBEAN facul = new FaculdadesBEAN(Integer.parseInt(id.getText()), descricao.getText(), 1);
+                    FaculdadesBEAN facul = new FaculdadesBEAN(Integer.parseInt(id.getText()), descricao.getText(), 1, horalocal);
                     controle.updateFaculdade(facul);
                 } else {
-                    FaculdadesBEAN facul = new FaculdadesBEAN(Integer.parseInt(id.getText()), descricao.getText(), 0);
+                    FaculdadesBEAN facul = new FaculdadesBEAN(Integer.parseInt(id.getText()), descricao.getText(), 0, horalocal);
                     controle.updateFaculdade(facul);
                 }
+                id.setText("");
                 descricao.setText("");
 
                 List<FaculdadesBEAN> listfaculdades = controle.listaFaculdades();
 
                 preencher_tabela(listfaculdades);
+                ativado.setEnabled(false);
+                desativado.setEnabled(false);
             }
         }
 
@@ -301,19 +323,27 @@ public class Tela_Faculdades extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane, "Selecione na tabela a faculdade que deseja desativar!");
             } else {
 
-                FaculdadesBEAN facul = new FaculdadesBEAN(Integer.parseInt(id.getText()), descricao.getText(), 0);
+                FaculdadesBEAN facul = new FaculdadesBEAN(Integer.parseInt(id.getText()), descricao.getText(), 0, horalocal);
                 controle.updateFaculdade(facul);
 
             }
             List<FaculdadesBEAN> listfaculdades = controle.listaFaculdades();
 
             preencher_tabela(listfaculdades);
+            id.setText("");
+            descricao.setText("");
+            ativado.setEnabled(false);
+            desativado.setEnabled(false);
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void inativoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inativoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inativoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -358,6 +388,7 @@ public class Tela_Faculdades extends javax.swing.JFrame {
     private javax.swing.JRadioButton desativado;
     private javax.swing.JTextField descricao;
     private javax.swing.JTextField id;
+    private javax.swing.JCheckBox inativo;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
