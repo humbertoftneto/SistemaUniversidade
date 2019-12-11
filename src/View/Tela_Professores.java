@@ -252,8 +252,7 @@ public class Tela_Professores extends javax.swing.JFrame {
                         modelo.addRow(new Object[]{prof.getIdProfessor(), prof.getNomeProfessor(), prof.getCpfProfessor(), prof.getSituacaoProfessor()});
                     }
                 }
-            }
-            else{
+            } else {
                 for (ProfessoresBEAN prof : listProfessores) {
                     if (prof.getSituacaoProfessor() == 0) {
                         modelo.addRow(new Object[]{prof.getIdProfessor(), prof.getNomeProfessor(), prof.getCpfProfessor(), prof.getSituacaoProfessor()});
@@ -295,16 +294,21 @@ public class Tela_Professores extends javax.swing.JFrame {
                     ProfessoresBEAN prof = new ProfessoresBEAN(Integer.parseInt(id.getText()), nome.getText(), cpf.getText(), 0, horalocal);
                     controle.updateProfessor(prof);
                 }
+                id.setText("");
                 nome.setText("");
                 cpf.setText("");
                 List<ProfessoresBEAN> listaprofessores = controle.listaProfessores();
                 preencher_tabela(listaprofessores);
+                ativado.setEnabled(false);
+                desativado.setEnabled(false);
             }
         }
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void TabelaContatosCadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabelaContatosCadMouseClicked
+        ativado.setEnabled(true);
+        desativado.setEnabled(true);
         int linhaEditora = TabelaContatosCad.getSelectedRow();
         id.setText(TabelaContatosCad.getValueAt(linhaEditora, 0).toString());
         nome.setText(TabelaContatosCad.getValueAt(linhaEditora, 1).toString());
@@ -352,6 +356,11 @@ public class Tela_Professores extends javax.swing.JFrame {
             }
             List<ProfessoresBEAN> listaprofessores = controle.listaProfessores();
             preencher_tabela(listaprofessores);
+            ativado.setEnabled(false);
+            desativado.setEnabled(false);
+            id.setText("");
+            nome.setText("");
+            cpf.setText("");
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 

@@ -18,13 +18,13 @@ public class AlunosDAO {
         return instance;
     }
     public long create(AlunosBEAN aluno) {
-        String query = "INSERT INTO aluno (nomeAluno, cpfAluno, situacaoAluno) VALUES (?,?,?)";
-        return MySQLDAO.executeQuery(query, aluno.getNomeAluno(), aluno.getCpfAluno(), aluno.getSituacaoAluno());
+        String query = "INSERT INTO aluno (nomeAluno, cpfAluno, situacaoAluno, ultimaAtualizacao) VALUES (?,?,?,?)";
+        return MySQLDAO.executeQuery(query, aluno.getNomeAluno(), aluno.getCpfAluno(), aluno.getSituacaoAluno(), aluno.getUltimaAtualizacao());
     }
 
     public void update(AlunosBEAN aluno) {
-        String query = "UPDATE aluno SET nomeAluno=?, cpfAluno=?, situacaoAluno=? WHERE matriculaAluno = ?";
-        MySQLDAO.executeQuery(query, aluno.getNomeAluno(), aluno.getCpfAluno(), aluno.getSituacaoAluno(), aluno.getMatriculaAluno());
+        String query = "UPDATE aluno SET nomeAluno=?, cpfAluno=?, situacaoAluno=?, ultimaAtualizacao=? WHERE matriculaAluno = ?";
+        MySQLDAO.executeQuery(query, aluno.getNomeAluno(), aluno.getCpfAluno(), aluno.getSituacaoAluno(), aluno.getUltimaAtualizacao(), aluno.getMatriculaAluno());
     }
 
     public ArrayList<AlunosBEAN> findAllAluno() {
@@ -37,7 +37,7 @@ public class AlunosDAO {
         rs = MySQLDAO.getResultSet(query);
         try {
             while (rs.next()) {
-                lista.add(new AlunosBEAN(rs.getInt("matriculaAluno"), rs.getString("nomeAluno"), rs.getString("cpfAluno"), rs.getInt("situacaoAluno")));
+                lista.add(new AlunosBEAN(rs.getInt("matriculaAluno"), rs.getString("nomeAluno"), rs.getString("cpfAluno"), rs.getInt("situacaoAluno"), rs.getTimestamp("ultimaAtualizacao")));
             }
             rs.close();
         } catch (SQLException e) {
@@ -52,7 +52,7 @@ public class AlunosDAO {
         rs = MySQLDAO.getResultSet("SELECT * FROM aluno WHERE matriculaAluno=?", matriculaAluno);
         try {
             if (rs.next()) {
-                result = new AlunosBEAN(rs.getInt("matriculaAluno"), rs.getString("nomeAluno"), rs.getString("cpfAluno"), rs.getInt("situacaoAluno"));
+                result = new AlunosBEAN(rs.getInt("matriculaAluno"), rs.getString("nomeAluno"), rs.getString("cpfAluno"), rs.getInt("situacaoAluno"), rs.getTimestamp("ultimaAtualizacao"));
             }
             rs.close();
         } catch (SQLException e) {
@@ -64,7 +64,7 @@ public class AlunosDAO {
     public int findMatriculaAluno(AlunosBEAN aluno) {
         int result = 0;
         ResultSet rs = null;
-        rs = MySQLDAO.getResultSet("SELECT * FROM aluno WHERE nomeAluno= ? and cpfAluno= ? and situacaoAluno= ?", aluno.getNomeAluno(), aluno.getCpfAluno(), aluno.getSituacaoAluno());
+        rs = MySQLDAO.getResultSet("SELECT * FROM aluno WHERE nomeAluno= ? and cpfAluno= ? and situacaoAluno= ? and ultimaAtualizacao=?", aluno.getNomeAluno(), aluno.getCpfAluno(), aluno.getSituacaoAluno(), aluno.getUltimaAtualizacao());
         try {
             if (rs.next()) {
                 result = rs.getInt("matriculaAluno");
