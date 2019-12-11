@@ -52,7 +52,7 @@ public class ProfessoresDAO {
     public ProfessoresBEAN findProfessor(int idProfessor) {
         ProfessoresBEAN result = null;
         ResultSet rs = null;
-        rs = MySQLDAO.getResultSet("SELECT * FROM Contatos WHERE idProfessor=?", idProfessor);
+        rs = MySQLDAO.getResultSet("SELECT * FROM professor WHERE idProfessor=?", idProfessor);
         try {
             if (rs.next()) {
                 result = new ProfessoresBEAN(rs.getInt("idProfessor"), rs.getString("nomeProfessor"), rs.getString("cpfProfessor"), rs.getInt("situacaoProfessor"), rs.getTimestamp("ultimaAtualizacao"));
@@ -67,7 +67,7 @@ public class ProfessoresDAO {
     public int findIdProfessor(ProfessoresBEAN professor) {
         int result = 0;
         ResultSet rs = null;
-        rs = MySQLDAO.getResultSet("SELECT * FROM contatos WHERE nomeProfessor= ? and cpfProfessor= ?and situacaoProfessor = ? and ultimaAtualizacao = ?", professor.getNomeProfessor(), professor.getCpfProfessor(), professor.getSituacaoProfessor(), professor.getUltimaAtualizacao());
+        rs = MySQLDAO.getResultSet("SELECT * FROM professor WHERE nomeProfessor= ? and cpfProfessor= ?and situacaoProfessor = ? and ultimaAtualizacao = ?", professor.getNomeProfessor(), professor.getCpfProfessor(), professor.getSituacaoProfessor(), professor.getUltimaAtualizacao());
         try {
             if (rs.next()) {
                 result = rs.getInt("idProfessor");
@@ -82,7 +82,7 @@ public class ProfessoresDAO {
     public Boolean isExistProfessor(int idProfessor) {
         Boolean result = false;
         ResultSet rs = null;
-        rs = MySQLDAO.getResultSet("SELECT * FROM Contatos WHERE idProfessor= ?", idProfessor);
+        rs = MySQLDAO.getResultSet("SELECT * FROM professor WHERE idProfessor= ?", idProfessor);
         try {
             if (rs.next()) {
                 result = true;

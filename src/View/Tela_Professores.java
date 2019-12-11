@@ -25,6 +25,8 @@ public class Tela_Professores extends javax.swing.JFrame {
 
     public Tela_Professores() {
         initComponents();
+        ativado.setEnabled(false);
+        desativado.setEnabled(false);
         modelo = (javax.swing.table.DefaultTableModel) TabelaContatosCad.getModel();
 
         List<ProfessoresBEAN> listaprofessores = controle.listaProfessores();
@@ -56,7 +58,7 @@ public class Tela_Professores extends javax.swing.JFrame {
         ativado = new javax.swing.JRadioButton();
         desativado = new javax.swing.JRadioButton();
         id = new javax.swing.JTextField();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        inativo = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -86,11 +88,11 @@ public class Tela_Professores extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Nome", "CPF", "Situação"
+                "ID", "Nome", "CPF", "Situação", "Ultima atualização"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -161,10 +163,10 @@ public class Tela_Professores extends javax.swing.JFrame {
             }
         });
 
-        jCheckBox1.setText("Mostrar inativos");
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+        inativo.setText("Mostrar inativos");
+        inativo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
+                inativoActionPerformed(evt);
             }
         });
 
@@ -195,7 +197,7 @@ public class Tela_Professores extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(desativado)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jCheckBox1))))
+                                .addComponent(inativo))))
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -225,7 +227,7 @@ public class Tela_Professores extends javax.swing.JFrame {
                     .addComponent(cpf, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ativado)
                     .addComponent(desativado)
-                    .addComponent(jCheckBox1))
+                    .addComponent(inativo))
                 .addGap(26, 26, 26)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
@@ -244,8 +246,19 @@ public class Tela_Professores extends javax.swing.JFrame {
 
         modelo.setNumRows(0);
         try {
-            for (ProfessoresBEAN prof : listProfessores) {
-                modelo.addRow(new Object[]{prof.getIdProfessor(), prof.getNomeProfessor(), prof.getCpfProfessor(), prof.getSituacaoProfessor()});
+            if (inativo.isSelected() == false) {
+                for (ProfessoresBEAN prof : listProfessores) {
+                    if (prof.getSituacaoProfessor() == 1) {
+                        modelo.addRow(new Object[]{prof.getIdProfessor(), prof.getNomeProfessor(), prof.getCpfProfessor(), prof.getSituacaoProfessor()});
+                    }
+                }
+            }
+            else{
+                for (ProfessoresBEAN prof : listProfessores) {
+                    if (prof.getSituacaoProfessor() == 0) {
+                        modelo.addRow(new Object[]{prof.getIdProfessor(), prof.getNomeProfessor(), prof.getCpfProfessor(), prof.getSituacaoProfessor()});
+                    }
+                }
             }
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(null, "Erro ao listar dados - " + erro);
@@ -260,12 +273,11 @@ public class Tela_Professores extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         if (id.getText().isEmpty()) {
-            if (nome.getText().isEmpty() || cpf.getText().isEmpty() || ativado.getText().isEmpty() || desativado
-                    .getText().isEmpty()) {
+            if (nome.getText().isEmpty() || cpf.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(rootPane, "Campo vazio, por favor preencher!");
             } else {
 
-                ProfessoresBEAN prof = new ProfessoresBEAN(0, nome.getText(), cpf.getText(), 1, horalocal);
+                ProfessoresBEAN prof = new ProfessoresBEAN(nome.getText(), cpf.getText(), 1, horalocal);
                 controle.addProfessor(prof);
                 nome.setText("");
                 cpf.setText("");
@@ -280,7 +292,7 @@ public class Tela_Professores extends javax.swing.JFrame {
                     ProfessoresBEAN prof = new ProfessoresBEAN(Integer.parseInt(id.getText()), nome.getText(), cpf.getText(), 1, horalocal);
                     controle.updateProfessor(prof);
                 } else {
-                    ProfessoresBEAN prof = new ProfessoresBEAN(Integer.parseInt(id.getText()), nome.getText(), cpf.getText(), 0,  horalocal);
+                    ProfessoresBEAN prof = new ProfessoresBEAN(Integer.parseInt(id.getText()), nome.getText(), cpf.getText(), 0, horalocal);
                     controle.updateProfessor(prof);
                 }
                 nome.setText("");
@@ -351,9 +363,10 @@ public class Tela_Professores extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
+    private void inativoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inativoActionPerformed
+        List<ProfessoresBEAN> listaprofessores = controle.listaProfessores();
+        preencher_tabela(listaprofessores);
+    }//GEN-LAST:event_inativoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -400,11 +413,11 @@ public class Tela_Professores extends javax.swing.JFrame {
     private javax.swing.JTextField cpf;
     private javax.swing.JRadioButton desativado;
     private javax.swing.JTextField id;
+    private javax.swing.JCheckBox inativo;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

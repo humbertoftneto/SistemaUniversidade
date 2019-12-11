@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package View;
+
 import Model.DisciplinasBEAN;
 import Model.FaculdadesBEAN;
 import Controller.Controle;
@@ -14,22 +15,26 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Tela_Disciplinas extends javax.swing.JFrame {
-javax.swing.table.DefaultTableModel modelo;
+
+    javax.swing.table.DefaultTableModel modelo;
     static Controle controle = new Controle();
     static Timestamp horalocal = Timestamp.valueOf(LocalDateTime.now());
+
     public Tela_Disciplinas() {
         initComponents();
+        ativado.setEnabled(false);
+        desativado.setEnabled(false);
         modelo = (javax.swing.table.DefaultTableModel) TabelaContatosCad.getModel();
         faculdade.removeAllItems();
         ArrayList<FaculdadesBEAN> listafaculdade = controle.listaFaculdades();
-        for(FaculdadesBEAN facul : listafaculdade){
-            if(facul.getSituacaoFaculdade() == 1){
-                faculdade.addItem(facul.getDescricaoFaculdade());
-            }
+
+        for (FaculdadesBEAN facul : listafaculdade) {
+
+            faculdade.addItem(facul.getDescricaoFaculdade());
         }
         List<DisciplinasBEAN> listdisciplinas = controle.listaDisciplinas();
         preencher_tabela(listdisciplinas);
-        
+
     }
 
     /**
@@ -42,8 +47,18 @@ javax.swing.table.DefaultTableModel modelo;
 
         modelo.setNumRows(0);
         try {
-            for (DisciplinasBEAN disc : listDisciplinas) {
-                modelo.addRow(new Object[]{disc.getIdDisciplina(), disc.getDescricaoDisciplina(), disc.getSituacaoDisciplina(), disc.getUltimaAtualizacao(), disc.getIdFaculdade()});
+            if (inativo.isSelected() == false) {
+                for (DisciplinasBEAN disc : listDisciplinas) {
+                    if (disc.getSituacaoDisciplina() == 1) {
+                        modelo.addRow(new Object[]{disc.getIdDisciplina(), disc.getDescricaoDisciplina(), disc.getSituacaoDisciplina(), disc.getUltimaAtualizacao(), disc.getIdFaculdade()});
+                    }
+                }
+            } else {
+                for (DisciplinasBEAN disc : listDisciplinas) {
+                    if (disc.getSituacaoDisciplina() == 0) {
+                        modelo.addRow(new Object[]{disc.getIdDisciplina(), disc.getDescricaoDisciplina(), disc.getSituacaoDisciplina(), disc.getUltimaAtualizacao(), disc.getIdFaculdade()});
+                    }
+                }
             }
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(null, "Erro ao listar dados - " + erro);
@@ -168,6 +183,11 @@ javax.swing.table.DefaultTableModel modelo;
         });
 
         inativo.setText("Mostrar inativos");
+        inativo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inativoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -222,10 +242,11 @@ javax.swing.table.DefaultTableModel modelo;
                     .addComponent(jLabel2)
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(faculdade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ativado)
-                    .addComponent(desativado))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(faculdade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(desativado)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(inativo)
                 .addGap(3, 3, 3)
@@ -251,6 +272,8 @@ javax.swing.table.DefaultTableModel modelo;
     }//GEN-LAST:event_idActionPerformed
 
     private void TabelaContatosCadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabelaContatosCadMouseClicked
+        ativado.setEnabled(true);
+        desativado.setEnabled(true);
         int linhaEditora = TabelaContatosCad.getSelectedRow();
         id.setText(TabelaContatosCad.getValueAt(linhaEditora, 0).toString());
         descricao.setText(TabelaContatosCad.getValueAt(linhaEditora, 1).toString());
@@ -270,11 +293,12 @@ javax.swing.table.DefaultTableModel modelo;
                 JOptionPane.showMessageDialog(rootPane, "Selecione na tabela a disciplina que deseja desativar!");
             } else {
                 ArrayList<FaculdadesBEAN> listafaculdade = controle.listaFaculdades();
-                    for(FaculdadesBEAN facul : listafaculdade){
-                        
-                    if(faculdade.getSelectedItem().equals(facul.getDescricaoFaculdade()))
+                for (FaculdadesBEAN facul : listafaculdade) {
+
+                    if (faculdade.getSelectedItem().equals(facul.getDescricaoFaculdade())) {
                         id_faculdade = facul.getIdFaculdade();
                     }
+                }
                 DisciplinasBEAN disc = new DisciplinasBEAN(Integer.parseInt(id.getText()), descricao.getText(), 0, horalocal, id_faculdade);
                 controle.updateDisciplina(disc);
 
@@ -282,6 +306,7 @@ javax.swing.table.DefaultTableModel modelo;
             List<DisciplinasBEAN> listdisciplinas = controle.listaDisciplinas();
 
             preencher_tabela(listdisciplinas);
+
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -292,6 +317,8 @@ javax.swing.table.DefaultTableModel modelo;
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         id.setText("");
         descricao.setText("");
+        ativado.setEnabled(false);
+        desativado.setEnabled(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -300,14 +327,15 @@ javax.swing.table.DefaultTableModel modelo;
             if (descricao.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(rootPane, "Campo vazio, por favor preencher!");
             } else {
-                    ArrayList<FaculdadesBEAN> listafaculdade = controle.listaFaculdades();
-                    for(FaculdadesBEAN facul : listafaculdade){
-                        
-                    if(faculdade.getSelectedItem().equals(facul.getDescricaoFaculdade()))
+                ArrayList<FaculdadesBEAN> listafaculdade = controle.listaFaculdades();
+                for (FaculdadesBEAN facul : listafaculdade) {
+
+                    if (faculdade.getSelectedItem().equals(facul.getDescricaoFaculdade())) {
                         id_faculdade = facul.getIdFaculdade();
                     }
-                    DisciplinasBEAN disc = new DisciplinasBEAN(0, descricao.getText(), 1, horalocal, id_faculdade);
-                    controle.addDisciplina(disc);
+                }
+                DisciplinasBEAN disc = new DisciplinasBEAN(0, descricao.getText(), 1, horalocal, id_faculdade);
+                controle.addDisciplina(disc);
                 descricao.setText("");
                 List<DisciplinasBEAN> listdisciplinas = controle.listaDisciplinas();
 
@@ -319,11 +347,12 @@ javax.swing.table.DefaultTableModel modelo;
                 JOptionPane.showMessageDialog(rootPane, "Campo vazio, por favor preencher!");
             } else {
                 ArrayList<FaculdadesBEAN> listafaculdade = controle.listaFaculdades();
-                    for(FaculdadesBEAN facul : listafaculdade){
-                        
-                    if(faculdade.getSelectedItem().equals(facul.getDescricaoFaculdade()))
+                for (FaculdadesBEAN facul : listafaculdade) {
+
+                    if (faculdade.getSelectedItem().equals(facul.getDescricaoFaculdade())) {
                         id_faculdade = facul.getIdFaculdade();
                     }
+                }
                 if (ativado.isSelected()) {
                     DisciplinasBEAN disc = new DisciplinasBEAN(Integer.parseInt(id.getText()), descricao.getText(), 1, horalocal, id_faculdade);
                     controle.updateDisciplina(disc);
@@ -331,8 +360,10 @@ javax.swing.table.DefaultTableModel modelo;
                     DisciplinasBEAN disc = new DisciplinasBEAN(Integer.parseInt(id.getText()), descricao.getText(), 0, horalocal, id_faculdade);
                     controle.updateDisciplina(disc);
                 }
+                id.setText("");
                 descricao.setText("");
-
+                ativado.setEnabled(false);
+                desativado.setEnabled(false);
                 List<DisciplinasBEAN> listdisciplinas = controle.listaDisciplinas();
 
                 preencher_tabela(listdisciplinas);
@@ -341,7 +372,7 @@ javax.swing.table.DefaultTableModel modelo;
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void faculdadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_faculdadeActionPerformed
-        
+
     }//GEN-LAST:event_faculdadeActionPerformed
 
     private void ativadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ativadoActionPerformed
@@ -351,6 +382,11 @@ javax.swing.table.DefaultTableModel modelo;
     private void desativadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_desativadoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_desativadoActionPerformed
+
+    private void inativoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inativoActionPerformed
+        List<DisciplinasBEAN> listdisciplinas = controle.listaDisciplinas();
+        preencher_tabela(listdisciplinas);
+    }//GEN-LAST:event_inativoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -369,13 +405,17 @@ javax.swing.table.DefaultTableModel modelo;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Tela_Disciplinas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Tela_Disciplinas.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Tela_Disciplinas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Tela_Disciplinas.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Tela_Disciplinas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Tela_Disciplinas.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Tela_Disciplinas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Tela_Disciplinas.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>

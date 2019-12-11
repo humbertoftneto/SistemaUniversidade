@@ -38,10 +38,19 @@ public class Tela_Faculdades extends javax.swing.JFrame {
 
         modelo.setNumRows(0);
         try {
+            if(inativo.isSelected() == false){
             for (FaculdadesBEAN facul : listFaculdades) {
                 if (facul.getSituacaoFaculdade() == 1) {
                     modelo.addRow(new Object[]{facul.getIdFaculdade(), facul.getDescricaoFaculdade(), facul.getSituacaoFaculdade()});
                 }
+            }
+            }
+            else{
+               for (FaculdadesBEAN facul : listFaculdades) {
+                if (facul.getSituacaoFaculdade() == 0) {
+                    modelo.addRow(new Object[]{facul.getIdFaculdade(), facul.getDescricaoFaculdade(), facul.getSituacaoFaculdade()});
+                }
+            } 
             }
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(null, "Erro ao listar dados - " + erro);
@@ -342,7 +351,8 @@ public class Tela_Faculdades extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void inativoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inativoActionPerformed
-        // TODO add your handling code here:
+        List<FaculdadesBEAN> listfaculdades = controle.listaFaculdades();
+        preencher_tabela(listfaculdades);
     }//GEN-LAST:event_inativoActionPerformed
 
     /**
